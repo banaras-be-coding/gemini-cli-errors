@@ -1320,7 +1320,8 @@ export async function createTransport(
           for (const line of lines) {
             if (line.trim()) {
               debugLogger.debug(
-                `[DEBUG] [MCP STDERR (${mcpServerName})]: ${line.trim()}`,
+                `[DEBUG] [MCP STDERR (${mcpServerName})]: `,
+                line.trim(),
               );
             }
           }
