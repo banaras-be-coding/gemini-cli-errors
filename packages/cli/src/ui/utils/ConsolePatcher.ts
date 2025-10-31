@@ -42,7 +42,8 @@ export class ConsolePatcher {
     console.info = this.originalConsoleInfo;
   };
 
-  private formatArgs = (args: unknown[]): string => util.format(...args);
+  private formatArgs = (args: unknown[]): string =>
+    util.formatWithOptions({ maxStringLength: null }, ...args);
 
   private patchConsoleMethod =
     (
