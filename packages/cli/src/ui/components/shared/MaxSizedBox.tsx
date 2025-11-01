@@ -588,6 +588,13 @@ function layoutInkElementAsStyledText(
               splitIndex++;
             }
 
+            if (splitIndex === 0 && remainingWordAsCodePoints.length > 0) {
+              // The very first character is already wider than the available
+              // width. In this case, we just add the character and let it
+              // overflow.
+              splitIndex = 1;
+            }
+
             if (splitIndex > 0) {
               const part = remainingWordAsCodePoints
                 .slice(0, splitIndex)
