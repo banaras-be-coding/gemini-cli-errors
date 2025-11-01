@@ -1311,12 +1311,31 @@ export async function createTransport(
       stderr: 'pipe',
     });
     if (debugMode) {
+      transport.stderr!.setEncoding('utf8');
+      let buffer = '';
       transport.stderr!.on('data', (data) => {
-        const stderrStr = data.toString().trim();
-        debugLogger.debug(
-          `[DEBUG] [MCP STDERR (${mcpServerName})]: `,
-          stderrStr,
-        );
+        buffer += data;
+        let lastNewline;
+        while ((lastNewline = buffer.lastIndexOf('\n')) !== -1) {
+          const lines = buffer.substring(0, lastNewline).split('\n');
+          for (const line of lines) {
+            if (line.trim()) {
+              debugLogger.debug(
+                `[DEBUG] [MCP STDERR (${mcpServerName})]: `,
+                line.trim(),
+              );
+            }
+          }
+          buffer = buffer.substring(lastNewline + 1);
+        }
+      });
+
+      transport.stderr!.on('end', () => {
+        if (buffer.trim()) {
+          debugLogger.debug(
+            `[DEBUG] [MCP STDERR (${mcpServerName})]: ${buffer.trim()}`,
+          );
+        }
       });
     }
     return transport;
