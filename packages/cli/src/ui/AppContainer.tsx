@@ -853,7 +853,7 @@ Logging in with Google... Please restart Gemini CLI to continue.
   const ctrlCTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [ctrlDPressCount, setCtrlDPressCount] = useState(0);
   const ctrlDTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [constrainHeight, setConstrainHeight] = useState<boolean>(true);
+  const [constrainHeight, setConstrainHeight] = useState<boolean>(false);
   const [ideContextState, setIdeContextState] = useState<
     IdeContext | undefined
   >();

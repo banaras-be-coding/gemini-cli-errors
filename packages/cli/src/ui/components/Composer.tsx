@@ -123,9 +123,7 @@ export const Composer = () => {
             <DetailedMessagesDisplay
               messages={uiState.filteredConsoleMessages}
               maxHeight={
-                uiState.constrainHeight
-                  ? debugConsoleMaxHeight
-                  : Number.MAX_SAFE_INTEGER
+                uiState.constrainHeight ? debugConsoleMaxHeight : undefined
               }
               width={uiState.mainAreaWidth}
             />
