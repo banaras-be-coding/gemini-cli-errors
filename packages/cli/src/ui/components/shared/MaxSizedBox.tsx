@@ -7,6 +7,7 @@
 import React, { Fragment, useEffect, useId } from 'react';
 import { Box, Text } from 'ink';
 import stringWidth from 'string-width';
+import { debugLogger } from '@google/gemini-cli-core';
 import { theme } from '../../semantic-colors.js';
 import { toCodePoints } from '../../utils/textUtils.js';
 import { useOverflowActions } from '../../contexts/OverflowContext.js';
@@ -28,7 +29,7 @@ function debugReportError(message: string, element: React.ReactNode) {
   if (!enableDebugLog) return;
 
   if (!React.isValidElement(element)) {
-    console.error(
+    debugLogger.log(
       message,
       `Invalid element: '${String(element)}' typeof=${typeof element}`,
     );
@@ -44,10 +45,10 @@ function debugReportError(message: string, element: React.ReactNode) {
     const lineNumber = elementWithSource._source?.lineNumber;
     sourceMessage = fileName ? `${fileName}:${lineNumber}` : '<Unknown file>';
   } catch (error) {
-    console.error('Error while trying to get file name:', error);
+    debugLogger.log('Error while trying to get file name:', error);
   }
 
-  console.error(message, `${String(element.type)}. Source: ${sourceMessage}`);
+  debugLogger.log(message, `${String(element.type)}. Source: ${sourceMessage}`);
 }
 interface MaxSizedBoxProps {
   children?: React.ReactNode;
@@ -103,6 +104,7 @@ export const MaxSizedBox: React.FC<MaxSizedBoxProps> = ({
   overflowDirection = 'top',
   additionalHiddenLinesCount = 0,
 }) => {
+  debugLogger.log('bala: MaxSizedBox rendering');
   const id = useId();
   const { addOverflowingId, removeOverflowingId } = useOverflowActions() || {};
 
@@ -570,6 +572,7 @@ function layoutInkElementAsStyledText(
         }
 
         if (wordWidth > availableWidth) {
+          debugLogger.log('bala: Splitting a long word:', word);
           // Word is too long, needs to be split across lines
           const wordAsCodePoints = toCodePoints(word);
           let remainingWordAsCodePoints = wordAsCodePoints;
@@ -586,6 +589,15 @@ function layoutInkElementAsStyledText(
               }
               currentSplitWidth += charWidth;
               splitIndex++;
+            }
+
+            // If not even a single character fits, take one anyway to avoid
+            // an infinite loop. It will overflow the line.
+            if (splitIndex === 0 && remainingWordAsCodePoints.length > 0) {
+              debugLogger.log(
+                'bala: A single character is wider than availableWidth, splitting by 1',
+              );
+              splitIndex = 1;
             }
 
             if (splitIndex > 0) {
