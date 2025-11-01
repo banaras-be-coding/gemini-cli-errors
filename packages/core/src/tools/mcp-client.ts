@@ -1311,9 +1311,10 @@ export async function createTransport(
       stderr: 'pipe',
     });
     if (debugMode) {
+      transport.stderr!.setEncoding('utf8');
       let buffer = '';
       transport.stderr!.on('data', (data) => {
-        buffer += data.toString();
+        buffer += data;
         let lastNewline;
         while ((lastNewline = buffer.lastIndexOf('\n')) !== -1) {
           const lines = buffer.substring(0, lastNewline).split('\n');
