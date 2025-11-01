@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { debugLogger } from '@google/gemini-cli-core';
 import React, { Fragment, useEffect, useId } from 'react';
 import { Box, Text } from 'ink';
 import stringWidth from 'string-width';
@@ -571,6 +572,9 @@ function layoutInkElementAsStyledText(
 
         if (wordWidth > availableWidth) {
           // Word is too long, needs to be split across lines
+          debugLogger.log(
+            `[MaxSizedBox] Word "${word}" is too long for available width ${availableWidth}, splitting.`,
+          );
           const wordAsCodePoints = toCodePoints(word);
           let remainingWordAsCodePoints = wordAsCodePoints;
           while (remainingWordAsCodePoints.length > 0) {
@@ -586,6 +590,12 @@ function layoutInkElementAsStyledText(
               }
               currentSplitWidth += charWidth;
               splitIndex++;
+            }
+
+            // If the very first character is wider than the available width,
+            // we have to add it, otherwise we'll loop forever.
+            if (splitIndex === 0 && remainingWordAsCodePoints.length > 0) {
+              splitIndex = 1;
             }
 
             if (splitIndex > 0) {
