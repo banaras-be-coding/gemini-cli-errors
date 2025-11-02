@@ -30,6 +30,11 @@ class DebugLogger {
   }
 
   debug(...args: unknown[]): void {
+    if (typeof args[1] === 'string') {
+      console.log(
+        `[TRACE 2] debugLogger.ts: Received message of length ${args[1].length}: "${args[1]}"`,
+      );
+    }
     console.debug(...args);
   }
 }

@@ -1313,7 +1313,9 @@ export async function createTransport(
     if (debugMode) {
       transport.stderr!.on('data', (data) => {
         const stderrStr = data.toString().trim();
-        console.trace();
+        console.log(
+          `[TRACE 1] mcp-client.ts: Received stderr data of length ${stderrStr.length}: "${stderrStr}"`,
+        );
         debugLogger.debug(
           `[DEBUG] [MCP STDERR (${mcpServerName})]: `,
           stderrStr,
