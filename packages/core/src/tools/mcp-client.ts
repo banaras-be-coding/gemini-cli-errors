@@ -1311,7 +1311,11 @@ export async function createTransport(
       stderr: 'pipe',
     });
     if (debugMode) {
+      transport.stderr!.setEncoding('utf8');
       transport.stderr!.on('data', (data) => {
+        debugLogger.log(
+          `[DEBUG] MCP STDERR (${mcpServerName}) chunk length: ${data.length}`,
+        );
         const stderrStr = data.toString().trim();
         debugLogger.debug(
           `[DEBUG] [MCP STDERR (${mcpServerName})]: `,
