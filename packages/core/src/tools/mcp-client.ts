@@ -1313,6 +1313,7 @@ export async function createTransport(
     if (debugMode) {
       transport.stderr!.on('data', (data) => {
         const stderrStr = data.toString().trim();
+        console.trace();
         debugLogger.debug(
           `[DEBUG] [MCP STDERR (${mcpServerName})]: `,
           stderrStr,
