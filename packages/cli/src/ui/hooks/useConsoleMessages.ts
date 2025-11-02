@@ -75,6 +75,11 @@ export function useConsoleMessages(): UseConsoleMessagesReturn {
 
   const handleNewMessage = useCallback(
     (message: ConsoleMessageItem) => {
+      if (message.type === 'debug') {
+        console.log(
+          `[TRACE 4] useConsoleMessages.ts: Queuing message of length ${message.content.length}: "${message.content}"`,
+        );
+      }
       messageQueueRef.current.push(message);
       if (!timeoutRef.current) {
         // Batch updates using a timeout. 16ms is a reasonable delay to batch

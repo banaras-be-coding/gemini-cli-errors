@@ -60,9 +60,15 @@ export class ConsolePatcher {
         }
 
         if (type !== 'debug' || this.params.debugMode) {
+          const content = this.formatArgs(args);
+          if (type === 'debug') {
+            this.originalConsoleLog(
+              `[TRACE 3] ConsolePatcher.ts: Received message of length ${content.length}: "${content}"`,
+            );
+          }
           this.params.onNewMessage?.({
             type,
-            content: this.formatArgs(args),
+            content,
             count: 1,
           });
         }
