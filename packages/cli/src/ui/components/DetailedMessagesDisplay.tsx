@@ -67,12 +67,14 @@ export const DetailedMessagesDisplay: React.FC<
           return (
             <Box key={index} flexDirection="row">
               <Text color={textColor}>{icon} </Text>
-              <Text color={textColor} wrap="wrap">
-                {msg.content}
-                {msg.count && msg.count > 1 && (
-                  <Text color={theme.text.secondary}> (x{msg.count})</Text>
-                )}
-              </Text>
+              <Box flexShrink={1}>
+                <Text color={textColor} wrap="wrap">
+                  {msg.content}
+                  {msg.count && msg.count > 1 && (
+                    <Text color={theme.text.secondary}> (x{msg.count})</Text>
+                  )}
+                </Text>
+              </Box>
             </Box>
           );
         })}
